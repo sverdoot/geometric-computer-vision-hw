@@ -130,6 +130,7 @@ def parse_args():
                         help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
     parser.add_argument('-i', '--interpolation-method', dest='interpolation_method', required=False, type=str, default='bilin',
                         choices=['bilin', 'bispline'], help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
+    #parser.add_argument('--resolution-type', type=str, choices=['med', 'high'], default='high')
     return parser.parse_args()
 
 

@@ -95,6 +95,9 @@ def pairwise_interpolate_predictions(
     # Distances to be produces as output.
     distances_j_interp = np.zeros(len(points_j), dtype=float)
 
+    # print(np.argmax(image_i.reshape(-1)), np.argmax(image_i.flatten()))
+    # return
+
     for idx, point_from_j in tqdm(enumerate(reprojected_j)):
         point_nn_indexes = nn_indexes_in_i[idx]
         # Build an [n, 3] array of XYZ coordinates for each reprojected point by taking
