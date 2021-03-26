@@ -1,21 +1,22 @@
-# RES_MED=0.05
-# RES_HIGH=0.02
+definter="bilin"
+INTERPOLATION=${1:-$definter}
 
-# med
+med_names=("abc_0050_00500166_5894bbd701b2bb0fc88a6978_007")
 
-python3 scripts/fuse_images.py -t=validation/med_res/abc_0050_00500082_4cb4bf14428fe3832dd7ed78_000.hdf5 -p=validation/med_res/abc_0050_00500082_4cb4bf14428fe3832dd7ed78_000__predictions.hdf5 -o=out
+for str in ${med_names[*]}; do
+    python3 scripts/fuse_images.py \
+        --true-filename validation/med_res/${str}.hdf5 \
+        --pred-filename validation/med_res/${str}__predictions.hdf5 \
+        --output-dir out/med/${INTERPOLATION} \
+        -i ${INTERPOLATION}
+done
 
-# python3 scripts/fuse_images.py -t=validation/med_res/abc_0050_00500149_54930d6f7740b03347d89a56_000.hdf5 -p=validation/med_res/abc_0050_00500149_54930d6f7740b03347d89a56_000__predictions.hdf5 -o=results --resolution_3d=$RES_MED
+high_names=() #"abc_0050_00500082_4cb4bf14428fe3832dd7ed78_000")
 
-# python3 scripts/fuse_images.py -t=validation/med_res/abc_0050_00500166_5894bbd701b2bb0fc88a6978_007.hdf5 -p=validation/med_res/abc_0050_00500166_5894bbd701b2bb0fc88a6978_007__predictions.hdf5 -o=results --resolution_3d=$RES_MED
-
-# python3 scripts/fuse_images.py -t=validation/med_res/abc_0050_00500348_fae0ecd8b3dc068d39f0d09c_000.hdf5 -p=validation/med_res/abc_0050_00500348_fae0ecd8b3dc068d39f0d09c_000__predictions.hdf5 -o=results --resolution_3d=$RES_MED
-
-# python3 scripts/fuse_images.py -t=validation/med_res/abc_0050_00500683_511f7debb63f164003339dec_000.hdf5 -p=validation/med_res/abc_0050_00500683_511f7debb63f164003339dec_000__predictions.hdf5 -o=results --resolution_3d=$RES_MED
-
-
-# high
-
-# python3 scripts/fuse_images.py -t=validation/high_res/abc_0050_00500166_5894bbd701b2bb0fc88a6978_007.hdf5 -p=validation/high_res/abc_0050_00500166_5894bbd701b2bb0fc88a6978_007__predictions.hdf5 -o=results_high --resolution_3d=$RES_HIGH
-
-# python3 scripts/fuse_images.py -t=validation/high_res/abc_0050_00500348_fae0ecd8b3dc068d39f0d09c_000.hdf5 -p=validation/high_res/abc_0050_00500348_fae0ecd8b3dc068d39f0d09c_000__predictions.hdf5 -o=results_high --resolution_3d=$RES_HIGH
+for str in ${high_names[*]}; do
+    python3 scripts/fuse_images.py \
+        --true-filename validation/high_res/${str}.hdf5 \
+        --pred-filename validation/high_res/${str}__predictions.hdf5 \
+        --output-dir out/high/${INTERPOLATION} \
+        -i ${INTERPOLATION}
+done

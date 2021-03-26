@@ -88,7 +88,8 @@ def main(options):
         gt_extrinsics,
         gt_intrinsics,
         nn_set_size=options.nn_set_size,
-        distance_interpolation_threshold=threshold)
+        distance_interpolation_threshold=threshold,
+        method=options.interpolation_method)
 
     # Now that we have obtained a set of predictions per each individual point,
     # we can combine distance-to-feature predictions into a consolidated
@@ -127,6 +128,8 @@ def parse_args():
                         help='3D resolution of scans.')
     parser.add_argument('-f', '--distance_interp_factor', dest='distance_interp_factor', required=False, type=float, default=6.,
                         help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
+    parser.add_argument('-i', '--interpolation-method', dest='interpolation_method', required=False, type=str, default='bilin',
+                        choices=['bilin', 'bispline'], help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
     return parser.parse_args()
 
 

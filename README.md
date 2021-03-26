@@ -10,6 +10,10 @@ chmod +x get_data.sh
 ./get_data.sh
 ```
 
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage 
 
 ```bash

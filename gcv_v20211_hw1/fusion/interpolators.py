@@ -64,6 +64,7 @@ def pairwise_interpolate_predictions(
         indexes_j,
         distance_interpolation_threshold: float = 1.0,
         nn_set_size: int = 4,
+        method='bilin',
 ):
     # Extract view information from input variables
     image_i, distances_i, points_i, pose_i, imaging_i = view_i
@@ -115,8 +116,12 @@ def pairwise_interpolate_predictions(
                 #  to construct a bilinear interpolator from distances predicted
                 #  in `view_i` (i.e. `distances_i`) into the point in `view_j`.
                 #  Use the interpolator to compute an interpolated distance value.
-                interpolator = interpolate.interp2d(*uv_i[point_nn_indexes].T, distances_i.reshape(-1)[point_nn_indexes])
-                distances_j_interp[idx] = interpolator(point_from_j[0], point_from_j[1])
+                if method == 'bilin':
+                    interpolator = interpolate.interp2d(*uv_i[point_nn_indexes].T, distances_i.reshape(-1)[point_nn_indexes])
+                    distances_j_interp[idx] = interpolator(*point_from_j[:2])
+                elif method == 'bispline':
+                    tck = interpolate.bisplrep(*uv_i[point_nn_indexes].T, distances_i.reshape(-1)[point_nn_indexes], kx=1, ky=1)
+                    distances_j_interp[idx] = interpolate.bisplev(*point_from_j[:2], tck)
 
             except ValueError as e:
                 print('Error while interpolating point {idx}:'
