@@ -1,10 +1,12 @@
+#!/usr/bin/bash
+
 DATAPATH="validation"
 
 mkdir -p out/med/bilin
 mkdir -p out/high/bilin
 
 mkdir -p out/med/bispline
-mkdir -p out/med/bispline
+mkdir -p out/high/bispline
 
 if ! [ -d "$DATAPATH" ] ; then
     wget https://www.dropbox.com/s/lxg7lb8xqcmxowa/validation.zip?dl=0

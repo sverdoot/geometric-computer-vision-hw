@@ -23,7 +23,6 @@ HIGH_RES = 0.02
 MED_RES = 0.05
 LOW_RES = 0.125
 
-
 def main(options):
     # extract a filename from the input pathname to use further
     name = os.path.splitext(os.path.basename(options.true_filename))[0]
@@ -101,7 +100,8 @@ def main(options):
             n_points,
             list_predictions,
             list_indexes_in_whole,
-            list_points)
+            list_points,
+            aggregation_method=options.aggregation)
 
     # save point cloud with predicted distance-to-feature values to an output file
     pred_output_filename = os.path.join(
@@ -130,6 +130,8 @@ def parse_args():
                         help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
     parser.add_argument('-i', '--interpolation-method', dest='interpolation_method', required=False, type=str, default='bilin',
                         choices=['bilin', 'bispline'], help='distance_interp_factor * resolution_3d is the distance_interpolation_threshold')
+    parser.add_argument('-a', '--aggregation', dest='aggregation', type=str, 
+                        choices=['min', 'truncated_min', 'trancated_mean', 'truncated_median',], default='min')
     #parser.add_argument('--resolution-type', type=str, choices=['med', 'high'], default='high')
     return parser.parse_args()
 

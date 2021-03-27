@@ -10,6 +10,8 @@ def combine_predictions(
         list_predictions: List[np.array],
         list_indexes_in_whole: List[np.array],
         list_points: List[np.array],
+        aggregation_method='min',
+        postprocessing=None,
 ) -> Tuple[np.array, Mapping]:
 
     """Given a point cloud with more than one distance-to-feature
@@ -23,9 +25,11 @@ def combine_predictions(
     :param list_points:
     :return: a list of predictions
     """
+
     fused_predictions = np.ones(n_points) * np.inf
 
     # step 1: gather predictions
+    
     predictions_variants = defaultdict(list)
     iterable = zip(list_predictions, list_indexes_in_whole, list_points)
     for distances, indexes_gt, points_gt in tqdm(iterable):
@@ -34,6 +38,26 @@ def combine_predictions(
 
     # step 2: consolidate predictions
     for idx, values in predictions_variants.items():
-        fused_predictions[idx] = np.min(values)
+        if aggregation_method == 'min':
+            fused_predictions[idx] = np.min(values)
+        elif aggregation_method == 'truncated_min':
+            # Truncated average/min, computed by removing the
+            # largest and smallest 20% of values, then computing the
+            # corresponding quantity.
+            values = np.sort(values)
+            values = values[int(0.2*len(values)):int(0.8*len(values))]
+            fused_predictions[idx] = np.min(values)
+        elif aggregation_method == 'truncated_median':
+            values = np.sort(values)
+            values = values[int(0.2*len(values)):int(0.8*len(values))]
+            fused_predictions[idx] = np.median(values)
+        elif aggregation_method == 'truncated_mean':
+            values = np.sort(values)
+            values = values[int(0.2*len(values)):int(0.8*len(values))]
+            fused_predictions[idx] = np.mean(values)
+
+        # if postprocessing is not None:
+        #     if postprocessing == 'L2':
+                
 
     return fused_predictions, predictions_variants

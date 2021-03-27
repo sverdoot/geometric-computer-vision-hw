@@ -17,5 +17,6 @@ pip install -r requirements.txt
 ## Usage 
 
 ```bash
-./run.sh
+./run.sh bilin
+./run.sh bispline
 ```
