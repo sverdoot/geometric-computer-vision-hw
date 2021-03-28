@@ -18,6 +18,8 @@ for str in ${med_names[*]}; do
         -r 0.05
 done
 
+tar cfvz out/med/${INTERPOLATION}/med_${INTERPOLATION}.tar.gz out/med/${INTERPOLATION}/
+
 high_names=('validation/high_res/abc_0050_00500348_fae0ecd8b3dc068d39f0d09c_000' \
 'validation/high_res/abc_0050_00500166_5894bbd701b2bb0fc88a6978_007')
 
@@ -29,3 +31,5 @@ for str in ${high_names[*]}; do
         -i ${INTERPOLATION} \
         -r 0.02
 done
+
+tar cfvz out/high/${INTERPOLATION}/high_${INTERPOLATION}.tar.gz out/high/${INTERPOLATION}

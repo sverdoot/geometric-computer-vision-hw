@@ -14,6 +14,15 @@ chmod +x get_data.sh
 pip install -r requirements.txt
 ```
 
+## Download results
+
+To download the .tar.gz archives with resulting files:
+
+```bash
+chmod +x download_results.sh
+./download_results.sh
+```
+
 ## Usage 
 
 ```bash
