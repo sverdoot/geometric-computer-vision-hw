@@ -101,6 +101,8 @@ def pairwise_interpolate_predictions(
     distances_to_nearest = np.linalg.norm(reprojected_j[:, None, :] - point_from_j_nns, ord=2, axis=-1)
     interp_mask = np.all(distances_to_nearest < distance_interpolation_threshold, axis=-1)
 
+    distances_i = distances_i.reshape(-1)
+
     for idx, point_from_j in tqdm(enumerate(reprojected_j)):
         point_nn_indexes = nn_indexes_in_i[idx]
         # Build an [n, 3] array of XYZ coordinates for each reprojected point by taking
@@ -125,10 +127,10 @@ def pairwise_interpolate_predictions(
                 #  in `view_i` (i.e. `distances_i`) into the point in `view_j`.
                 #  Use the interpolator to compute an interpolated distance value.
                 if method == 'bilin':
-                    interpolator = interpolate.interp2d(*uv_i[point_nn_indexes].T, distances_i.reshape(-1)[point_nn_indexes])
+                    interpolator = interpolate.interp2d(*uv_i[point_nn_indexes].T, distances_i[point_nn_indexes])
                     distances_j_interp[idx] = interpolator(*point_from_j[:2])
                 elif method == 'bispline':
-                    tck = interpolate.bisplrep(*uv_i[point_nn_indexes].T, distances_i.reshape(-1)[point_nn_indexes], kx=1, ky=1)
+                    tck = interpolate.bisplrep(*uv_i[point_nn_indexes].T, distances_i[point_nn_indexes], kx=1, ky=1)
                     distances_j_interp[idx] = interpolate.bisplev(*point_from_j[:2], tck)
 
             except ValueError as e:
