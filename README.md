@@ -2,8 +2,6 @@
 
 <!-- Please download the validation datasets at [validation.zip](https://www.dropbox.com/s/lxg7lb8xqcmxowa/validation.zip?dl=0) -->
 
-Fast version is holded in the branch ```fast```
-
 ## Installation
 
 ```bash
