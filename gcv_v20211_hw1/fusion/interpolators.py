@@ -95,8 +95,11 @@ def pairwise_interpolate_predictions(
     # Distances to be produces as output.
     distances_j_interp = np.zeros(len(points_j), dtype=float)
 
-    # print(np.argmax(image_i.reshape(-1)), np.argmax(image_i.flatten()))
-    # return
+    point_from_j_nns_all = np.concatenate([uv_i, image_i.reshape(-1, 1)], axis=1)
+    point_from_j_nns = point_from_j_nns_all[np.array(nn_indexes_in_i)]
+
+    distances_to_nearest = np.linalg.norm(reprojected_j[:, None, :] - point_from_j_nns, ord=2, axis=-1)
+    interp_mask = np.all(distances_to_nearest < distance_interpolation_threshold, axis=-1)
 
     for idx, point_from_j in tqdm(enumerate(reprojected_j)):
         point_nn_indexes = nn_indexes_in_i[idx]
@@ -104,13 +107,15 @@ def pairwise_interpolate_predictions(
         # UV values from pixel grid and Z value from depth image.
         # TODO: your code here: use `point_nn_indexes` found previously
         #  and distance values from `image_i` indexed by the same `point_nn_indexes`
-        point_from_j_nns = np.concatenate([uv_i[point_nn_indexes], image_i.reshape(-1)[point_nn_indexes].reshape(-1, 1)], axis=1)
+        
+        #point_from_j_nns = np.concatenate([uv_i[point_nn_indexes], image_i.reshape(-1)[point_nn_indexes].reshape(-1, 1)], axis=1)
 
         # TODO: compute a flag indicating the possibility to interpolate
         #  by checking distance between `point_from_j` and its `point_from_j_nns`
         #  against the value of `distance_interpolation_threshold`
-        distances_to_nearest = np.linalg.norm(point_from_j[None, :] - point_from_j_nns, ord=2, axis=1)
-        interp_mask[idx] = np.all(distances_to_nearest < distance_interpolation_threshold)
+        
+        #distances_to_nearest = np.linalg.norm(point_from_j[None, :] - point_from_j_nns, ord=2, axis=1)
+        #interp_mask[idx] = np.all(distances_to_nearest[idx, point_nn_indexes] < distance_interpolation_threshold)
 
         if interp_mask[idx]:
             # Actually perform interpolation
